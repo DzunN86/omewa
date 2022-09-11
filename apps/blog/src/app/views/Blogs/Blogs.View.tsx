@@ -1,6 +1,6 @@
 import { Heading, IconButton, VStack } from '@chakra-ui/react';
 import { Blog } from '@omewa/api-interfaces';
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useCallback, useEffect } from 'react';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import BlogForm from '../../components/BlogForm';
@@ -25,17 +25,26 @@ const BlogView = (): ReactElement => {
 
   useEffect(() => {
     fetchBlog();
-  });
+  }, []);
 
-  const fetchBlog = async () => {
-    const response = await fetch('/api/blog', {
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
-    });
-    const data = await response.json();
-    setBlogs(data);
-  };
+  const fetchBlog = useCallback(async () => {
+    if (token) {
+      const response = await fetch('/api/blog', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      });
+      if(response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        setToken(null);
+        return;
+      }
+      if(response.ok) {
+        const blogs = await response.json();
+        setBlogs(blogs);
+      }
+    }
+  }, [token]);
 
   const addBlog = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
