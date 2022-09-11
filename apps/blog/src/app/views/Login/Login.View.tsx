@@ -12,7 +12,7 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,7 +33,17 @@ const LoginView = () => {
     'idle'
   );
 
+  const [token, setToken] = React.useState<string | null>(
+    localStorage.getItem('token')
+  );
+
   const handleShowClick = () => setShowPassword(!showPassword);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  }, [token, navigate]);
 
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
