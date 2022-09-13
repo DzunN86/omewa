@@ -49,7 +49,7 @@ const LoginView = () => {
     e.preventDefault();
     setState('loading');
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('https://omewa-api.herokuapp.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

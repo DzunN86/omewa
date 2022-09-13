@@ -29,7 +29,7 @@ const BlogView = (): ReactElement => {
 
   const fetchBlog = useCallback(async () => {
     if (token) {
-      const response = await fetch('/api/blog', {
+      const response = await fetch('https://omewa-api.herokuapp.com/api/blog', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -67,7 +67,7 @@ const BlogView = (): ReactElement => {
   };
 
   const deleteBlog = async (id: number) => {
-    const response = await fetch(`/api/blog/${id}`, {
+    const response = await fetch(`https://omewa-api.herokuapp.com/api/blog/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: 'Bearer ' + token,
