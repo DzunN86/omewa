@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import { Message } from '@omewa/api-interfaces';
 import { BlogRoutes, AuthRoutes } from './app/blog';
+import path = require('path');
 
 const app = express();
 
@@ -22,5 +23,11 @@ AuthRoutes(app);
 const port = process.env.PORT || 3333;
 const server = app.listen(port, () => {
   console.log('Listening at http://localhost:' + port + '/api');
+});
+// Serve built frontend app
+app.use(express.static(path.join(__dirname, '../bookstore')))
+// Handle browser-side routes
+app.get('*', function(req, res) {
+res.sendFile('index.html', {root: path.join(__dirname, '../bookstore')});
 });
 server.on('error', console.error);
